@@ -1,0 +1,22 @@
+#version: "3.9"
+services:
+  student-service:
+    build: ./student-service
+    container_name: student-service
+    ports:
+      - "3000:3000"
+
+       # 👇 Esto hace que el código local se monte en el contenedor
+    volumes:
+      - ./student-service:/app
+      - /app/node_modules   # evita conflicto con node_modules local
+    command: npm run dev    # modo desarrollo (rápido)
+
+  report-service:
+    build: ./report-service
+    container_name: report-service
+    ports:
+      - "8000:8000"
+    depends_on:
+      - student-service
+
